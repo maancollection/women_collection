@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Detail</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #fff;
+    }
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 30px;
+    }
+    .product-image img {
+      max-width: 350px;
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+    .product-info {
+      max-width: 400px;
+    }
+    .product-info h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .price-label {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .contact {
+      margin-top: 30px;
+      font-weight: bold;
+    }
+    .contact span {
+      display: block;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="product-container">
+  <div class="product-image">
+    <img id="product-img" src="" alt="Product Image">
+  </div>
+  <div class="product-info">
+    <h2 id="product-name">Dress Material for Women.</h2>
+	<div class="price-label">Actual Price: <span id="actual-price"></span></div>
+	<div class="price-label">Discounted Price: <span id="discounted-price"></span></div>
+
+
+    <div class="contact">
+      To Order Contact:
+      <span>WhatsApp No: 9828982898</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const filename = params.get('filename');
+  const name = params.get('name');
+  const price = params.get('price');
+
+  if (filename && name && price) {
+    document.getElementById('product-img').src = `pic/${decodeURIComponent(filename)}`;
+    document.getElementById('product-img').alt = name;
+	document.getElementById('product-name').innerHTML = `Dress Material for Women.<br>${name}`;
+
+    
+	const discounted = parseFloat(price);
+	const actual = Math.ceil((discounted * 1.25) / 10) * 10;
+	document.getElementById('actual-price').textContent = `${actual} Rs.`;
+    document.getElementById('discounted-price').textContent = `${discounted} Rs.`;
+	
+  } else {
+    document.body.innerHTML = '<p>Invalid product details.</p>';
+  }
+</script>
+
+</body>
+</html>

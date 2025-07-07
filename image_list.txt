@@ -1,0 +1,23 @@
+Dress I 169.png : Dress I : 169
+Dress I 321.png : Dress I : 321
+Dress II 169.png : Dress II : 169
+Dress II 321.png : Dress II : 321
+Dress III 169.png : Dress III : 169
+Dress III 321.png : Dress III : 321
+Dress IV 169.png : Dress IV : 169
+Dress IV 321.png : Dress IV : 321
+Dress Material 250.png : Dress Material : 250
+Dress Material Blue 250.png : Dress Material Blue : 250
+Dress Material Pink 250.png : Dress Material Pink : 250
+Dress Material Pink Dot 250.png : Dress Material Pink Dot : 250
+Dress Material pink shade 250.png : Dress Material pink shade : 250
+Dress Material yellow 250.png : Dress Material yellow : 250
+Dress V 321.png : Dress V : 321
+Dress VI 321.png : Dress VI : 321
+Dress VII 321.png : Dress VII : 321
+Dress VIII 321.png : Dress VIII : 321
+II Dress Material 250.png : II Dress Material : 250
+image1_newlook_169.png : image1_newlook : 169
+image2 new dress for 169.png : image2 new dress for : 169
+image3_169.png : image3 : 169
+image4_321.png : image4 : 321
