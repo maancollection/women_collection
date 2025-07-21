@@ -7,63 +7,59 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderProducts(data) {
     container.innerHTML = '';
 
-    if (!data.length) {
-      container.innerHTML = '<p>No products found.</p>';
-      return;
-    }
+    data.forEach(({ folder, heading, description, price, availability }) => {
+      const imgElement = new Image();
 
-    data.forEach(({ filename, name, price }) => {
-      const imgSrc = `pic/${encodeURIComponent(filename)}`;
-      const detailLink = `product.html?filename=${encodeURIComponent(filename)}&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}`;
+      imgElement.onload = () => {
+        const detailLink = `product.html?folder=${folder}&heading=${encodeURIComponent(heading)}&description=${encodeURIComponent(description)}&price=${encodeURIComponent(price)}&availability=${encodeURIComponent(availability)}`;
 
-      const card = document.createElement('div');
-      card.className = 'card';
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <a href="${detailLink}">
+            <img src="${imgElement.src}" alt="${heading}">
+          </a>
+          <div class="card-content">
+            <div class="title">${heading}</div>
+            <div class="price">Rs. ${price}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      };
 
-      card.innerHTML = `
-        <a href="${detailLink}">
-          <img src="${imgSrc}" alt="${name}">
-        </a>
-        <div class="card-content">
-          <div class="title">${name.toUpperCase()}</div>
-          <div class="price">Rs. ${price}</div>
-        </div>
-      `;
+      imgElement.onerror = () => {
+        imgElement.src = `pic/dress_material/${folder}/pic_1.png`;
+      };
 
-      container.appendChild(card);
+      imgElement.src = `pic/dress_material/${folder}/pic_1.jpg`;
     });
   }
 
-  fetch('image_list.txt')
-    .then(response => {
-      if (!response.ok) throw new Error("Failed to load image_list.txt");
-      return response.text();
-    })
-    .then(data => {
-      const lines = data.trim().split('\n');
-
-      productList = lines
-        .map(line => {
-          const [filename, name, price] = line.split(':').map(x => x.trim());
-          return filename && name && price
-            ? { filename, name, price: parseFloat(price) }
-            : null;
-        })
-        .filter(Boolean);
+  fetch('image_list.csv')
+    .then(response => response.text())
+    .then(csvText => {
+      const lines = csvText.trim().split('\n').slice(1); // skip header
+      productList = lines.map(line => {
+        const [no, folder, heading, description, price, availability] = line.split(',').map(s => s.trim());
+        return {
+          folder,
+          heading,
+          description,
+          price: parseFloat(price),
+          availability
+        };
+      });
 
       renderProducts(productList);
     })
     .catch(err => {
-      console.error('Error loading products:', err);
-      container.innerHTML = '<p style="color:red;">Failed to load products.</p>';
+      console.error('Error loading CSV:', err);
+      container.innerHTML = '<p style="color:red;">Failed to load product list.</p>';
     });
 
-  sortButton.addEventListener('click', () => {
-    const sorted = [...productList].sort((a, b) => {
-      return sortAscending ? a.price - b.price : b.price - a.price;
-    });
-
+  sortButton?.addEventListener('click', () => {
+    const sorted = [...productList].sort((a, b) => sortAscending ? a.price - b.price : b.price - a.price);
     renderProducts(sorted);
-
     sortAscending = !sortAscending;
     sortButton.textContent = sortAscending
       ? 'Sort by Price (Low to High)'

@@ -2,85 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Product Detail</title>
+  <title>Product Details</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
       background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .product-container {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 30px;
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #333;
     }
-    .product-image img {
-      max-width: 350px;
+
+    img {
       width: 100%;
-      border: 1px solid #ccc;
-    }
-    .product-info {
-      max-width: 400px;
-    }
-    .product-info h2 {
-      font-size: 22px;
+      max-height: 450px;
+      object-fit: contain;
       margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
+
+    .description {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
     .price-label {
-      font-size: 18px;
+      font-weight: bold;
       margin: 10px 0;
     }
-    .contact {
-      margin-top: 30px;
-      font-weight: bold;
+
+    .availability {
+      margin-top: 10px;
+      font-style: italic;
+      color: green;
     }
-    .contact span {
-      display: block;
-      margin-top: 5px;
+
+    .back-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #0078d4;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+
+    .back-button:hover {
+      background-color: #005ea6;
     }
   </style>
 </head>
 <body>
-
-<div class="product-container">
-  <div class="product-image">
+  <div class="container">
+    <h2 id="product-title">Loading...</h2>
     <img id="product-img" src="" alt="Product Image">
+    <p id="product-description" class="description"></p>
+    <div class="price-label">Discounted Price: <span id="discounted-price"></span></div>
+    <div class="price-label">Actual Price: <span id="actual-price"></span></div>
+    <div class="availability" id="availability"></div>
+    <a class="back-button" href="index.html">&larr; Back to Gallery</a>
   </div>
-  <div class="product-info">
-    <h2 id="product-name">Dress Material for Women.</h2>
-	<div class="price-label">Actual Price: <span id="actual-price"></span></div>
-	<div class="price-label">Discounted Price: <span id="discounted-price"></span></div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
 
-    <div class="contact">
-      To Order Contact:
-      <span>WhatsApp No: 9828982898</span>
-    </div>
-  </div>
-</div>
+      const folder = getQueryParam("folder");
+      const heading = getQueryParam("heading");
+      const description = getQueryParam("description");
+      const price = getQueryParam("price");
+      const availability = getQueryParam("availability");
 
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const filename = params.get('filename');
-  const name = params.get('name');
-  const price = params.get('price');
+      document.getElementById("product-title").textContent = "Dress Material for Women: " + heading;
+      document.getElementById("product-description").textContent = description;
+      document.getElementById("discounted-price").textContent = "Rs. " + price;
 
-  if (filename && name && price) {
-    document.getElementById('product-img').src = `pic/${decodeURIComponent(filename)}`;
-    document.getElementById('product-img').alt = name;
-	document.getElementById('product-name').innerHTML = `Dress Material for Women.<br>${name}`;
+      const actualPrice = Math.ceil((parseFloat(price) * 1.25) / 10) * 10;
+      document.getElementById("actual-price").textContent = "Rs. " + actualPrice;
 
-    
-	const discounted = parseFloat(price);
-	const actual = Math.ceil((discounted * 1.25) / 10) * 10;
-	document.getElementById('actual-price').textContent = `${actual} Rs.`;
-    document.getElementById('discounted-price').textContent = `${discounted} Rs.`;
-	
-  } else {
-    document.body.innerHTML = '<p>Invalid product details.</p>';
-  }
-</script>
+      if (availability) {
+        document.getElementById("availability").textContent = "Availability: " + availability;
+      }
 
+      const imgElem = document.getElementById("product-img");
+      const jpgPath = `pic/dress_material/${folder}/pic_1.jpg`;
+      const pngPath = `pic/dress_material/${folder}/pic_1.png`;
+
+      imgElem.onerror = () => {
+        imgElem.src = pngPath;
+      };
+
+      imgElem.src = jpgPath;
+    });
+  </script>
 </body>
 </html>
