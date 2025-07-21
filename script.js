@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
           folder,
           heading,
           description,
-          price: parseFloat(price),
+          price: parseFloat(price), // ✅ Ensures numeric sorting
           availability
         };
       });
@@ -57,12 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
       container.innerHTML = '<p style="color:red;">Failed to load product list.</p>';
     });
 
-  sortButton?.addEventListener('click', () => {
-    const sorted = [...productList].sort((a, b) => sortAscending ? a.price - b.price : b.price - a.price);
-    renderProducts(sorted);
-    sortAscending = !sortAscending;
-    sortButton.textContent = sortAscending
-      ? 'Sort by Price (Low to High)'
-      : 'Sort by Price (High to Low)';
-  });
+  if (sortButton) {
+    sortButton.addEventListener('click', () => {
+      const sorted = [...productList].sort((a, b) =>
+        sortAscending ? a.price - b.price : b.price - a.price
+      );
+
+      renderProducts(sorted);
+      sortAscending = !sortAscending;
+      sortButton.textContent = sortAscending
+        ? 'Sort by Price (High to Low)'
+        : 'Sort by Price (Low to High)';
+    });
+  }
 });
